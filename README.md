@@ -23,11 +23,11 @@ Supports any text file with valid brainfuck code<br>
 Can reformat input program file (removes comments, spacing, etc..)<br>
 
 ### TODO
-Optimization / Restructure of subroutine code
-Cmd parameter for memory cell storage (overflow 255->0 or unlimited)
-Cmd parameter for memory tape length (default: unlimited)
-Cmd parameter for reformatting input program file (saving to separate file)
-Cmd parameter for trace information of each step
+Optimization / Restructure of subroutine code<br>
+Cmd parameter for memory cell storage (overflow 255->0 or unlimited)<br>
+Cmd parameter for memory tape length (default: unlimited)<br>
+Cmd parameter for reformatting input program file (saving to separate file)<br>
+Cmd parameter for trace information of each step<br>
 Cmd parameter for advanced trace (diagram + pointer visualization)
 
 ### License
