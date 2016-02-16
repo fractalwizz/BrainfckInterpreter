@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Data::Dumper;
 
 my @prog;
 my @tape;
@@ -16,6 +15,7 @@ my $file = shift;
 outprog($file, \@prog); # use for debug
 
 while ($bail) {
+    # termination condition
     if ($proptr == @prog) { $bail--; next; }
     
     my $char = $prog[$proptr];
@@ -36,11 +36,34 @@ while ($bail) {
 
 #==================SUBROUTINES==========================
 
+#----------------------------
+#--------Instructions--------
+#----------------------------
+
+##\
+ # Shifts memptr right
+ #/
 sub shiftright { $memptr++; }
+
+##\
+ # Shifts memptr left unless at the left end of tape
+ #/
 sub shiftleft { unless ($memptr == 0) { $memptr--; } }
+
+##\
+ # Increments value of cell at memptr
+ #/
 sub increment { $tape[$memptr]++; }
+
+##\
+ # Decrements value of cell at memptr
+ #/
 sub decrement { $tape[$memptr]--; }
 
+##\
+ # Requests input from user
+ # Stores input in buffer, saves first char to cell at memptr
+ #/
 sub input {
     my $val;
 
@@ -64,8 +87,14 @@ sub input {
     }
 }
 
+##\
+ # Prints ASCII value of cell at memptr
+ #/
 sub output { print chr $tape[$memptr]; }
 
+##\
+ # Skip loop to matching right bracket if cell at memptr is zero
+ #/
 sub loopstart {
     if (!$tape[$memptr]) {
         my $count = 1;
@@ -83,6 +112,9 @@ sub loopstart {
     }
 }
 
+##\
+ # Backtrack to matching left bracket if cell at memptr is not zero
+ #/
 sub loopend {
     if ($tape[$memptr]) {
         my $count = 1;
@@ -100,6 +132,16 @@ sub loopend {
     }
 }
 
+#----------------------------
+#-----------Util-------------
+#----------------------------
+
+##\
+ # Saves contents of program array to file
+ #
+ # param: $file: name of input file
+ # param: $prog: name of program array
+ #/
 sub outprog {
     my ($file, $prog) = @_;
     
@@ -114,6 +156,13 @@ sub outprog {
     close(OUT);
 }
 
+##\
+ # Collects all program instructions into array
+ #
+ # param: $file: name of input file
+ #
+ # return: @out: array of program instructions
+ #/
 sub reduce {
     my ($file) = @_;
     my @out;

@@ -1,5 +1,5 @@
 ## BrainfckInterpreter
-Interpreter for the Brainfuck language written in Perl<br>
+Interpreter for the Brainfck language written in Perl<br>
 V0.8
 
 ### Disclaimer
@@ -11,15 +11,15 @@ Modern::Perl
 
 ### Usage
 perl bf.pl inputFile<br>
-  inputFile: path of image<br>
+  inputFile: path of file<br>
   
 ie:<br>
 perl bf.pl ./Examples/hellobig.bf<br>
 perl bf.pl cat.bf
 
 ### Features
-Brainfuck Esoteric Programming Language<br>
-Supports any text file with valid brainfuck code<br>
+Brainfck Esoteric Programming Language<br>
+Supports any text file with valid brainfck code<br>
 Can reformat input program file (removes comments, spacing, etc..)<br>
 
 ### TODO
