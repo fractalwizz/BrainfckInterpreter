@@ -1,8 +1,15 @@
 #!/usr/bin/perl
 use Modern::Perl;
+use Data::Dumper;
+use Getopt::Std;
+use File::Basename;
 
 my @prog;
 my @tape;
+my %opt = ();
+
+# cmd parameters
+getopts('fsl:', \%opt);
 
 my $buffer = "";
 my $bail = 1;
@@ -10,9 +17,34 @@ my $memptr = 0;
 my $proptr = 0;
 
 my $file = shift;
+
+if (!$file) {
+    my $prog = basename($0);
+    
+    print "USAGE\n";
+    print "  $prog [options] textfile\n\n";
+    print "DESCRIPTION\n";
+    print "  Brainfck Interpreter written in Perl\n\n";
+    print "OPTIONS\n";
+    print "  -f        Produce Flat version of input program\n";
+    print "  -s        Tape Cell Storage cap at 255 (overflow) (default: unlimited)\n";
+    print "  -l [int]  Tape Length (default: unlimited)\n\n";
+    print "OPERANDS\n";
+    print "  textfile  path to input text file\n\n";
+    print "FILES\n";
+    print "  Output files (-f,-s,...) written to current directory\n";
+    print "  Flat (-f) filename is textfile-flat.bf\n\n";
+    print "EXAMPLES\n";
+    print "  $prog ./Examples/cat.bf\n";
+    print "  $prog -f triangle.bf\n";
+    print "  $prog -s -l 20 one.bf\n";
+    
+    exit(1);
+}
+
 @prog = reduce($file);
 
-outprog($file, \@prog); # use for debug
+if ($opt{f}) { outprog($file, \@prog); }
 
 while ($bail) {
     # termination condition
@@ -43,22 +75,40 @@ while ($bail) {
 ##\
  # Shifts memptr right
  #/
-sub shiftright { $memptr++; }
+sub shiftright {
+    $memptr++;
+    if ($opt{l} && $memptr == $opt{l}) { $memptr = 0; }
+}
 
 ##\
  # Shifts memptr left unless at the left end of tape
  #/
-sub shiftleft { unless ($memptr == 0) { $memptr--; } }
+sub shiftleft {
+    if ($memptr == 0) {
+        if ($opt{l}) { $memptr = $opt{l} - 1; }
+    } else {
+        $memptr--;
+    }
+}
 
 ##\
  # Increments value of cell at memptr
  #/
-sub increment { $tape[$memptr]++; }
+sub increment {
+    $tape[$memptr]++;
+    
+    if ($opt{s}) {
+        if ($tape[$memptr] > 254) { $tape[$memptr] = 0; }
+    }
+}
 
 ##\
  # Decrements value of cell at memptr
  #/
-sub decrement { $tape[$memptr]--; }
+sub decrement {
+    $tape[$memptr]--;
+    if ($opt{l} && $tape[$memptr] < 0) { $tape[$memptr] = 254; }
+}
 
 ##\
  # Requests input from user
@@ -147,7 +197,7 @@ sub outprog {
     
     $file =~ s/(\S+)\..*$/$1/;
     $file .=  "a";
-    open(OUT, '>', "$file.bf") or die ("Cannot open $file.bf: $!\n");
+    open(OUT, '>', "$file-flat.bf") or die ("Cannot open $file-flat.bf: $!\n");
     
     for my $i(@$prog) {
         print OUT $i;

@@ -7,26 +7,31 @@ Fractalwizz is not the author of any of the example programs.<br>
 They are only provided to test the interpreter's functionality
 
 ### Module Dependencies
-Modern::Perl
+Modern::Perl<br>
+Getopt::Std<br>
+File::Basename
 
 ### Usage
-perl bf.pl inputFile<br>
-  inputFile: path of file<br>
+perl bf.pl [options] inputFile<br>
+  -f:         Program Flat Version Output<br>
+  -s:         Tape Cell Storage (255 overflow) (default: unlimited)<br>
+  -s [int]:   Tape Length (default: unlimited)<br>
+  inputFile: path of file
   
 ie:<br>
 perl bf.pl ./Examples/hellobig.bf<br>
-perl bf.pl cat.bf
+perl bf.pl -f cat.bf<br>
+perl bf.pl -l 8 jabh.bf
 
 ### Features
 Brainfck Esoteric Programming Language<br>
 Supports any text file with valid brainfck code<br>
-Can reformat input program file (removes comments, spacing, etc..)<br>
+Can reformat input program file (removes comments, spacing, etc..) (Cmd parameter)<br>
+Define Memory Tape Length Constraint (Cmd parameter)<br>
+Define Memory Tape Cell Storage Constraint (Cmd parameter)
 
 ### TODO
 Optimization / Restructure of subroutine code<br>
-Cmd parameter for memory cell storage (overflow 255->0 or unlimited)<br>
-Cmd parameter for memory tape length (default: unlimited)<br>
-Cmd parameter for reformatting input program file (saving to separate file)<br>
 Cmd parameter for trace information of each step<br>
 Cmd parameter for advanced trace (diagram + pointer visualization)
 
