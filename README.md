@@ -15,7 +15,7 @@ File::Basename
 perl bf.pl [options] inputFile<br>
   -f:         Program Flat Version Output<br>
   -s:         Tape Cell Storage (255 overflow) (default: unlimited)<br>
-  -s [int]:   Tape Length (default: unlimited)<br>
+  -l [int]:   Tape Length (default: unlimited)<br>
   inputFile: path of file
   
 ie:<br>
