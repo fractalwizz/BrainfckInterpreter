@@ -22,7 +22,7 @@ if (!$file) {
     my $prog = basename($0);
     
     print "USAGE\n";
-    print "  $prog [options] textfile\n\n";
+    print "  $prog [options] textfile OR progtext\n\n";
     print "DESCRIPTION\n";
     print "  Brainfck Interpreter written in Perl\n\n";
     print "OPTIONS\n";
@@ -30,7 +30,9 @@ if (!$file) {
     print "  -s        Tape Cell Storage cap at 255 (overflow) (default: unlimited)\n";
     print "  -l [int]  Tape Length (default: unlimited)\n\n";
     print "OPERANDS\n";
-    print "  textfile  path to input text file\n\n";
+    print "  textfile  path to input text file\n";
+    print "  or\n";
+    print "  progtext  Literal String of Program Instructions\n\n";
     print "FILES\n";
     print "  Output files (-f,-s,...) written to current directory\n";
     print "  Flat (-f) filename is textfile-flat.bf\n\n";
@@ -38,11 +40,12 @@ if (!$file) {
     print "  $prog ./Examples/cat.bf\n";
     print "  $prog -f triangle.bf\n";
     print "  $prog -s -l 20 one.bf\n";
+    print "  $prog \",[.,]\"\n";
     
     exit(1);
 }
 
-@prog = reduce($file);
+@prog = ($file =~ m/[<>\[\]]/) ? convert($file) : reduce($file);
 
 if ($opt{f}) { outprog($file, \@prog); }
 
@@ -194,9 +197,9 @@ sub loopend {
  #/
 sub outprog {
     my ($file, $prog) = @_;
+    if ($file =~ m/[<>\[\]]/) { $file = "cmdout.bf"}
     
     $file =~ s/(\S+)\..*$/$1/;
-    $file .=  "a";
     open(OUT, '>', "$file-flat.bf") or die ("Cannot open $file-flat.bf: $!\n");
     
     for my $i(@$prog) {
@@ -218,17 +221,28 @@ sub reduce {
     my @out;
     
     open(FILE, '<', $file) or die("Can't open $file: $!\n");
-    
-    while (<FILE>) {
-        my $str = $_;
-        
-        for (0 .. length($_) - 1) {
-            my $char = substr($str, 0, 1);
-            $str = substr($str, 1); 
-            
-            if ($char =~ m/[\>\<\+\-\.\,\[\]]/) { push(@out, $char); }
-        }
-    }
+    while (<FILE>) { push(@out, convert($_)); }
     
     return @out;
 }
+
+##\
+ # Converts Instruction String into array
+ #
+ # param: $file: string containing program Instructions
+ #
+ # return: $out: array of program instructions
+ #/
+ sub convert {
+    my ($file) = @_;
+    my @out;
+    
+    for (0 .. length($file) - 1) {
+        my $char = substr($file, 0, 1);
+        $file = substr($file, 1); 
+            
+        if ($char =~ m/[\>\<\+\-\.\,\[\]]/) { push(@out, $char); }
+    }
+    
+    return @out;
+ }
