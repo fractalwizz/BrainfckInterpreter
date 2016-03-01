@@ -1,6 +1,6 @@
 ## BrainfckInterpreter
 Interpreter for the Brainfck language written in Perl<br>
-V0.8
+V0.9
 
 ### Disclaimer
 Fractalwizz is not the author of any of the example programs.<br>
@@ -31,7 +31,6 @@ Define Memory Tape Length Constraint (Cmd parameter)<br>
 Define Memory Tape Cell Storage Constraint (Cmd parameter)
 
 ### TODO
-Optimization / Restructure of subroutine code<br>
 Cmd parameter for trace information of each step<br>
 Cmd parameter for advanced trace (diagram + pointer visualization)
 
