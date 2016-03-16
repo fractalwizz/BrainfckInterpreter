@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Data::Dumper;
 use Getopt::Std;
 use File::Basename;
 no warnings 'experimental::smartmatch';
@@ -10,7 +9,8 @@ my @tape;
 my %opt = ();
 
 # cmd parameters
-getopts('fsl:d', \%opt);
+getopts('fsl:dp', \%opt);
+if (not defined $opt{l}) { $opt{l} = 0; }
 
 my $buffer = "";
 my $bail = 1;
@@ -28,9 +28,10 @@ if (!$file) {
     print "  Brainfck Interpreter written in Perl\n\n";
     print "OPTIONS\n";
     print "  -f        Produce Flat version of input program\n";
-    print "  -d        Debug Statistics File Output\n";
+    print "  -d        Debug Statistics File Output (disabled with -p)\n";
     print "  -s        Tape Cell Storage cap at 255 (overflow) (default: unlimited)\n";
-    print "  -l [int]  Tape Length (default: unlimited)\n\n";
+    print "  -l [int]  Tape Length (default: unlimited)\n";
+	print "  -p        BF-to-Perl Conversion + execution\n\n";
     print "OPERANDS\n";
     print "  textfile  path to input text file\n";
     print "  or\n";
@@ -38,17 +39,18 @@ if (!$file) {
     print "FILES\n";
     print "  Output files (-f,-s,...) written to current directory\n";
     print "  Flat (-f) filename is textfile-flat.bf\n";
-    print "  DEBUG (-d) filename is textfile-debug.out\n\n";
+    print "  DEBUG (-d) filename is textfile-debug.out\n";
+	print "  Perl (-p) filename is textfile-perl.pl\n\n";
     print "EXAMPLES\n";
     print "  $prog ./Examples/cat.bf\n";
     print "  $prog -f triangle.bf\n";
-    print "  $prog -s -l 20 one.bf\n";
+    print "  $prog -s -p -l 20 one.bf\n";
     print "  $prog -d \",[.,]\"\n";
     
     exit(1);
 }
 
-if ($opt{d}) {
+if ($opt{d} && !$opt{p}) {
     my $fil = $file;
     if ($fil =~ m/[<>\[\]]/) { $fil = "cmdout.bf"; }
     
@@ -60,9 +62,14 @@ if ($opt{d}) {
 }
 
 @prog = ($file =~ m/[<>\[\]]/) ? convert($file) : reduce($file);
-if ($opt{d}) { print DEBUG "Program Array Initialized\n"; }
+if ($opt{d} && !$opt{p}) { print DEBUG "Program Array Initialized\n"; }
 
 if ($opt{f}) { outprog($file); }
+
+if ($opt{p}) {
+	transcode($file);
+	exit(0);
+}
 
 while ($bail) {
     if ($opt{d}) {
@@ -265,6 +272,67 @@ sub loopend {
 #----------------------------
 #-----------Util-------------
 #----------------------------
+
+##\
+ # Converts BF code to Perl Code
+ # Then executes created perl file
+ #
+ # param: $file: name of input file
+ #/
+sub transcode {
+	my ($file) = @_;
+	my $gorp;
+	
+	# define hash sets
+	my %hash = ();
+	my %temp = (
+		','=>'$t[$mptr] = ord(getc);',
+		'.'=>'print chr($t[$mptr]);',
+		'['=>'while($t[$mptr]) {',
+		']'=>'}',
+	);
+	my %defepat = (
+		'>'=>'$mptr++;',
+		'<'=>'$mptr--;',
+	);
+	my %defcell = (
+		'+'=>'$t[$mptr]++;',
+		'-'=>'$t[$mptr]--;',
+	);
+	my %epat = (
+		'>'=>'$mptr++;'."\n".'if ($mptr == '.$opt{l}.') { $mptr = 0; }',
+		'<'=>'$mptr = ($mptr == 0) ? '.($opt{l} - 1).' : $mptr - 1;',
+	);
+	my %cell = (
+		'+'=>'$t[$mptr]++;'."\n".'if ($t[$mptr] > 255) { $t[$mptr] = 0; }',
+		'-'=>'$t[$mptr]--;'."\n".'if ($t[$mptr] < 0) { $t[$mptr] = 255; }',
+	);
+	
+	# convert program array to string
+	for (@prog) { $gorp .= $_; }
+	
+	# construct custom hash translation table
+	%hash = (%hash, %temp);
+	if ($opt{l}) { %hash = (%hash, %epat); }
+	if ($opt{s}) { %hash = (%hash, %cell); }
+	unless (exists($hash{'>'})) { %hash = (%hash, %defepat); }
+	unless (exists($hash{'+'})) { %hash = (%hash, %defcell); }
+	
+	# translate
+	$gorp =~ s/(.)/$hash{$1}\n/g;
+	
+	if ($file =~ m/[<>\[\]]/) { $file = "cmdout.bf"; }
+	$file =~ /(\S+)\./;
+	$file = $1 . "-perl.pl";
+	
+	# output to file
+	open (OUT, ">", $file) or die ("DERP: $!");
+	print OUT $gorp;
+	close (OUT);
+	
+	# execute created file
+	system ("perl $file");
+}
 
 ##\
  # Saves contents of program array to file

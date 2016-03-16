@@ -1,0 +1,176 @@
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+while($t[$mptr]) {
+$mptr++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$mptr--;
+$t[$mptr]--;
+}
+$mptr++;
+while($t[$mptr]) {
+$mptr++;
+$t[$mptr]++;
+$mptr++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$mptr++;
+$t[$mptr]++;
+$mptr++;
+$t[$mptr]++;
+$t[$mptr]++;
+$mptr++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$mptr++;
+$t[$mptr]++;
+$t[$mptr]++;
+$mptr--;
+while($t[$mptr]) {
+$t[$mptr]++;
+$t[$mptr]++;
+$mptr--;
+}
+$mptr++;
+$t[$mptr]--;
+$t[$mptr]--;
+$t[$mptr]--;
+}
+$mptr++;
+$t[$mptr]--;
+$mptr++;
+$t[$mptr]--;
+print chr($t[$mptr]);
+while($t[$mptr]) {
+$mptr++;
+$t[$mptr]++;
+$t[$mptr]++;
+$mptr++;
+$t[$mptr]++;
+$mptr--;
+$mptr--;
+$t[$mptr]--;
+$t[$mptr]--;
+}
+$mptr++;
+$t[$mptr]--;
+$t[$mptr]--;
+print chr($t[$mptr]);
+$t[$mptr]--;
+$t[$mptr]--;
+print chr($t[$mptr]);
+$t[$mptr]++;
+print chr($t[$mptr]);
+$mptr++;
+$mptr++;
+$mptr++;
+$t[$mptr]++;
+$t[$mptr]++;
+print chr($t[$mptr]);
+$mptr--;
+$mptr--;
+print chr($t[$mptr]);
+$mptr--;
+$t[$mptr]--;
+$t[$mptr]--;
+$t[$mptr]--;
+$t[$mptr]--;
+$t[$mptr]--;
+$t[$mptr]--;
+print chr($t[$mptr]);
+$t[$mptr]++;
+print chr($t[$mptr]);
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+print chr($t[$mptr]);
+$mptr++;
+$mptr++;
+$t[$mptr]--;
+print chr($t[$mptr]);
+$mptr--;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+print chr($t[$mptr]);
+$mptr--;
+$t[$mptr]--;
+$t[$mptr]--;
+print chr($t[$mptr]);
+$mptr++;
+$mptr++;
+$mptr++;
+print chr($t[$mptr]);
+$mptr--;
+$mptr--;
+$t[$mptr]--;
+$t[$mptr]--;
+$t[$mptr]--;
+print chr($t[$mptr]);
+$mptr--;
+print chr($t[$mptr]);
+$t[$mptr]--;
+$t[$mptr]--;
+$mptr++;
+$t[$mptr]--;
+print chr($t[$mptr]);
+$mptr++;
+$t[$mptr]++;
+print chr($t[$mptr]);
+while($t[$mptr]) {
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+print chr($t[$mptr]);
+$t[$mptr]--;
+$t[$mptr]--;
+$t[$mptr]--;
+$mptr--;
+}
+$mptr++;
+$mptr++;
+while($t[$mptr]) {
+print chr($t[$mptr]);
+$t[$mptr]--;
+$t[$mptr]--;
+$t[$mptr]--;
+$mptr++;
+}
+$mptr--;
+$mptr--;
+print chr($t[$mptr]);
+$mptr--;
+$t[$mptr]++;
+print chr($t[$mptr]);
+$t[$mptr]++;
+$t[$mptr]++;
+print chr($t[$mptr]);
+$t[$mptr]++;
+$t[$mptr]++;
+$mptr++;
+$t[$mptr]++;
+$t[$mptr]++;
+$t[$mptr]++;
+while($t[$mptr]) {
+print chr($t[$mptr]);
+$mptr--;
+}
+while($t[$mptr]) {
+print chr($t[$mptr]);
+print chr($t[$mptr]);
+}
+$mptr--;
+print chr($t[$mptr]);
